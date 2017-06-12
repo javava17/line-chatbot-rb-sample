@@ -4,25 +4,27 @@ require 'line/bot'
 get '/' do
     # list users up and display
     'hello'
-end
+tend
 
 get '/list/friends' do
     File.open("friend.txt", "r") do |f|
         f.each_line { |line|
             puts line
-        }
+
+            }
     end
 end
-
+s
 get '/test/push' do
     userId = ENV["LINE_TEST_USER_ID"]
     message = {
         type: 'text',
         text: 'push message'
     }
+
     response = client.push_message(userId, message)
     p "#{response.code} #{response.body}"
-end
+tend
 
 get '/test/profile' do
     userId = ENV["LINE_TEST_USER_ID"]
@@ -37,6 +39,7 @@ get '/test/profile' do
         p "#{response.code} #{response.body}"
     end
 end
+#clientの部分
 
 def client
   @client ||= Line::Bot::Client.new { |config|
@@ -57,17 +60,37 @@ post '/callback' do
     case event
     when Line::Bot::Event::Message
       case event.type
-      when Line::Bot::Event::MessageType::Text
-        message = {
-          type: 'text',
-          text: event.message['text']
-        }
-        client.reply_message(event['replyToken'], message)
+#test
+
+when Line::Bot::Event::MessageType::Text
+message = {
+  type: 'text',
+  text: 'hello'
+}
+
+#client = Line::Bot::Client.new { |config|
+#    config.channel_secret = "<channel secret>"
+#    config.channel_token = "<channel access token>"
+#}
+
+response = client.reply_message(event['replyToken'], message)
+p response
+      end
+#testここまで
+#      when Line::Bot::Event::MessageType::Text
+#        message = {          type: 'text',
+#          text: event.message['text']
+#        }
+
+
+
+#        client.reply_message(event['replyToken'], message)
+          
       when Line::Bot::Event::MessageType::Image, Line::Bot::Event::MessageType::Video
         response = client.get_message_content(event.message['id'])
         tf = Tempfile.open("content")
         tf.write(response.body)
-      end
+      ende
     when Line::Bot::Event::Follow
         message = [{
           type: 'text',
